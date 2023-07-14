@@ -25,9 +25,6 @@ app.add_middleware(
 class Status(BaseModel):
     message: str
 
-class Task(BaseModel):
-    task: str
-
 
 @app.get("/tasks", response_model=List[Task_Pydantic])
 async def index():

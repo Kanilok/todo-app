@@ -11,7 +11,7 @@
         } )
     }
 
-    function onSubmit({detail}){
+    function Submit({detail}){
         fetch("http://127.0.0.1:8000/task/?task=" + detail,{
             method: 'POST'
         })
@@ -20,18 +20,14 @@
   
   
   <main>
-    <div>
+    <div style="margin:15px">
       <h1>List of tasks</h1>
       <div>
         {#each tasks as {description, is_done, id}, i(id)}
           <Task on:remove={remove} {description} {is_done} {id} {i} />
         {/each}
-        <NewTask on:onSubmit={onSubmit}/>
+        <NewTask on:onSubmit={Submit}/>
       </div>
     </div>
   </main>
-  
-  
-  <style>
-    
-  </style>
+ 
