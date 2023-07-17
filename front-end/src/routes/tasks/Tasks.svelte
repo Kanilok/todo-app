@@ -6,13 +6,13 @@
 
     function remove({detail}){
         tasks = tasks.filter(task => task.id != detail)
-        fetch("http://127.0.0.1:8000/task/" + detail,{
+        fetch("http://127.0.0.1:8000/tasks/" + detail,{
             method: 'DELETE'
         } )
     }
 
     function Submit({detail}){
-        fetch("http://127.0.0.1:8000/task/?task=" + detail,{
+        fetch("http://127.0.0.1:8000/tasks/?task=" + detail,{
             method: 'POST'
         })
     }

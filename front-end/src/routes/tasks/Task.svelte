@@ -15,7 +15,7 @@
 
     function done(){
         is_done = !is_done;
-        fetch("http://127.0.0.1:8000/task/" + id, {
+        fetch("http://127.0.0.1:8000/tasks/" + id, {
             method: 'PUT'
         })
     }

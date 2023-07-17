@@ -24,5 +24,5 @@
 <slot></slot>
 
 <footer class="bg-dark text-light text-center">
-    <p class="mt-3">TODO-app ~ Kamil Motyl 2023</p>
+    <p class="mt-3">TODO-app &copy ~ Kamil Motyl 2023</p>
 </footer>
