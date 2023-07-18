@@ -10,7 +10,6 @@ router = APIRouter(
 )
 
 
-
 class Status(BaseModel):
     message: str
 
@@ -21,8 +20,8 @@ async def index():
 
 
 @router.post("/", response_model=Task_Pydantic)
-async def create_task(task: str):
-    task_obj = await Tasks.create(description=task)
+async def create_task(task: str, date: str):
+    task_obj = await Tasks.create(description=task, due_date=date)
     return await Task_Pydantic.from_tortoise_orm(task_obj)
 
 

@@ -4,6 +4,7 @@
     export let description;
     export let is_done;
     export let id;
+    export let due_date;
     export let i;
 
 
@@ -25,6 +26,7 @@
 <div style="padding:10px"> 
     <div style="display:inline-block">
         <p style="width:20px; display:inline-block"><b>{i+1}.</b></p>
+        <p style="display:inline-block">due: {due_date} |</p>
         {#if is_done==true}
             <span style="text-decoration: line-through;width:220px; display:inline-block">{description}</span>
         {:else}
