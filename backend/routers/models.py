@@ -7,6 +7,9 @@ class Tasks(models.Model):
     description = fields.CharField(max_length=50)
     is_done = fields.BooleanField(default = False)
     due_date = fields.data.DateField()
+    add_date = fields.data.DatetimeField(auto_now_add = True)
+    done_date = fields.data.DateField(null = True)
+    archived = fields.BooleanField(default = False)
 
 
 Task_Pydantic = pydantic_model_creator(Tasks)

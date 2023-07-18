@@ -6,13 +6,12 @@
 
     function remove({detail}){
         tasks = tasks.filter(task => task.id != detail)
-        fetch("http://127.0.0.1:8000/tasks/" + detail,{
-            method: 'DELETE'
+        fetch("http://127.0.0.1:8000/tasks/archived/" + detail,{
+            method: 'PUT'
         } )
     }
 
     function Submit({detail}){
-      console.log(detail)
         fetch("http://127.0.0.1:8000/tasks/?task=" + detail.description + "&date=" + detail.date ,{
             method: 'POST'
         })
@@ -25,7 +24,7 @@
       <h1>List of tasks</h1>
       <div>
         {#each tasks as {description, is_done, id, due_date}, i(id)}
-          <Task on:remove={remove} {description} {is_done} {id} {due_date} {i} />
+            <Task on:remove={remove} {description} {is_done} {id} {due_date} {i} />
         {/each}
         <NewTask on:onSubmit={Submit}/>
       </div>

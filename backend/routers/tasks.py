@@ -3,6 +3,8 @@ from .models import Task_Pydantic, Tasks
 from pydantic import BaseModel
 from tortoise.contrib.fastapi import HTTPNotFoundError
 from fastapi import APIRouter, HTTPException
+from datetime import date
+
 
 router = APIRouter(
     prefix = "/tasks",
@@ -16,7 +18,11 @@ class Status(BaseModel):
 
 @router.get("/", response_model=List[Task_Pydantic])
 async def index():
-    return await Task_Pydantic.from_queryset(Tasks.all())
+    return await Task_Pydantic.from_queryset(Tasks.filter(archived=False))
+
+@router.get("/archived", response_model=List[Task_Pydantic])
+async def index():
+    return await Task_Pydantic.from_queryset(Tasks.filter(archived=True))
 
 
 @router.post("/", response_model=Task_Pydantic)
@@ -26,11 +32,23 @@ async def create_task(task: str, date: str):
 
 
 @router.put(
-    "/{task_id}", response_model=Task_Pydantic, responses={404: {"model": HTTPNotFoundError}}
+    "/is-done/{task_id}", response_model=Task_Pydantic, responses={404: {"model": HTTPNotFoundError}}
 )
-async def update_task(task_id: int):
+async def update_status(task_id: int):
     is_done = await Task_Pydantic.from_queryset_single(Tasks.get(id=task_id))
     await Tasks.filter(id=task_id).update(is_done = not is_done.dict()["is_done"])
+    if is_done.dict()["is_done"]:
+        Tasks.filter(id=task_id).update(done_date = date.today())
+    else:
+        Tasks.filter(id=task_id).update(done_date = None)
+    return await Task_Pydantic.from_queryset_single(Tasks.get(id=task_id))
+
+@router.put(
+    "/archived/{task_id}", response_model=Task_Pydantic, responses={404: {"model": HTTPNotFoundError}}
+)
+async def update_archive(task_id: int):
+    archived = await Task_Pydantic.from_queryset_single(Tasks.get(id=task_id))
+    await Tasks.filter(id=task_id).update(archived = not archived.dict()["archived"])
     return await Task_Pydantic.from_queryset_single(Tasks.get(id=task_id))
 
 
