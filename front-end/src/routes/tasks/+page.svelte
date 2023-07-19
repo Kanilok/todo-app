@@ -6,7 +6,9 @@
         tasks.push({id: data.item[i].id, 
                     description: data.item[i].description,
                     is_done: data.item[i].is_done,
-                    due_date:data.item[i].due_date
+                    due_date: data.item[i].due_date,
+                    add_date: data.item[i].add_date.substring(0,10),
+                    done_date: data.item[i].done_date
                 })
     }
 

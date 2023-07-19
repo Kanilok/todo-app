@@ -23,8 +23,8 @@
     <div style="margin:15px">
       <h1>List of tasks</h1>
       <div>
-        {#each tasks as {description, is_done, id, due_date}, i(id)}
-            <Task on:remove={remove} {description} {is_done} {id} {due_date} {i} />
+        {#each tasks as {description, is_done, id, due_date, add_date, done_date}, i(id)}
+            <Task on:remove={remove} {description} {is_done} {id} {due_date} {add_date} {done_date} {i} />
         {/each}
         <NewTask on:onSubmit={Submit}/>
       </div>

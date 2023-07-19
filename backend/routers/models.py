@@ -9,6 +9,7 @@ class Tasks(models.Model):
     due_date = fields.data.DateField()
     add_date = fields.data.DatetimeField(auto_now_add = True)
     done_date = fields.data.DateField(null = True)
+    done_on_time = fields.BooleanField(null = True)
     archived = fields.BooleanField(default = False)
 
 

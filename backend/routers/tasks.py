@@ -34,13 +34,15 @@ async def create_task(task: str, date: str):
 @router.put(
     "/is-done/{task_id}", response_model=Task_Pydantic, responses={404: {"model": HTTPNotFoundError}}
 )
-async def update_status(task_id: int):
+async def update_status(task_id: int, is_late: bool):
     is_done = await Task_Pydantic.from_queryset_single(Tasks.get(id=task_id))
     await Tasks.filter(id=task_id).update(is_done = not is_done.dict()["is_done"])
-    if is_done.dict()["is_done"]:
-        Tasks.filter(id=task_id).update(done_date = date.today())
+    if not is_done.dict()["is_done"]:
+        await Tasks.filter(id=task_id).update(done_date = date.today())
+        await Tasks.filter(id=task_id).update(done_on_time = not is_late)
     else:
-        Tasks.filter(id=task_id).update(done_date = None)
+        await Tasks.filter(id=task_id).update(done_date = None)
+        await Tasks.filter(id=task_id).update(done_on_time = None)
     return await Task_Pydantic.from_queryset_single(Tasks.get(id=task_id))
 
 @router.put(
