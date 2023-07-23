@@ -71,10 +71,10 @@
         {/if} 
     </div>
     {#if is_done}
-        <button class="btn btn-outline-success" type="button" on:click={done}>to do</button>
-        <button class="btn btn-outline-warning" type="button" on:click={remove}>archive</button>
+        <button class="bg-transparent hover:bg-green-700 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-700 rounded" type="button" on:click={done}>to do</button>
+        <button class="hover:bg-yellow-500 text-yellow-500 font-semibold hover:text-black py-2 px-4 border border-yellow-500 rounded" type="button" on:click={remove}>archive</button>
     {:else}
-        <button class="btn btn-outline-success" type="button" on:click={done}>done</button>
-        <button class="btn btn-outline-secondary disabled" type="button" on:click={remove}>archive</button>
+        <button class="hover:bg-green-700 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-700 rounded" type="button" on:click={done}>done</button>
+        <button class="text-yellow-500 font-semibold py-2 px-4 border border-yellow-500 rounded opacity-50" type="button" on:click={remove} disabled>archive</button>
     {/if}
 </div> 
