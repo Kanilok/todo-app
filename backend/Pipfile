@@ -9,6 +9,9 @@ uvicorn = "*"
 tortoise-orm = "*"
 pydantic = "==1.10.10"
 python-multipart = "*"
+bcrypt = "*"
+passlib = "*"
+pyjwt = "*"
 
 [dev-packages]
 

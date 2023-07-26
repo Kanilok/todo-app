@@ -17,11 +17,11 @@ class Status(BaseModel):
 
 
 @router.get("/", response_model=List[Task_Pydantic])
-async def index():
+async def get_unarchived_tasks():
     return await Task_Pydantic.from_queryset(Tasks.filter(archived=False))
 
 @router.get("/archived", response_model=List[Task_Pydantic])
-async def index():
+async def get_archived_tasks():
     return await Task_Pydantic.from_queryset(Tasks.filter(archived=True))
 
 
