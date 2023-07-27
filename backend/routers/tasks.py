@@ -1,9 +1,11 @@
 from typing import List
-from .models import Task_Pydantic, Tasks
+from .models import Task_Pydantic, User_Pydantic, Tasks
+from .users import get_current_user
 from pydantic import BaseModel
 from tortoise.contrib.fastapi import HTTPNotFoundError
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from datetime import date
+
 
 
 router = APIRouter(
@@ -12,12 +14,8 @@ router = APIRouter(
 )
 
 
-class Status(BaseModel):
-    message: str
-
-
 @router.get("/", response_model=List[Task_Pydantic])
-async def get_unarchived_tasks():
+async def get_unarchived_tasks(user: User_Pydantic = Depends(get_current_user)):
     return await Task_Pydantic.from_queryset(Tasks.filter(archived=False))
 
 @router.get("/archived", response_model=List[Task_Pydantic])
@@ -57,6 +55,3 @@ async def update_archive(task_id: int):
 @router.delete("/{task_id}", responses={404: {"model": HTTPNotFoundError}})
 async def delete_task(task_id: int):
     deleted_count = await Tasks.filter(id=task_id).delete()
-    if not deleted_count:
-        raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
-    return Status(message=f"Deleted task {task_id}")

@@ -13,6 +13,9 @@ class Tasks(models.Model):
     done_on_time = fields.BooleanField(null = True)
     archived = fields.BooleanField(default = False)
 
+    class Meta:
+        table = "tasks"
+
 class Users(models.Model):
     id = fields.IntField(pk=True)
     username = fields.CharField(max_length = 25, unique = True)
@@ -22,10 +25,11 @@ class Users(models.Model):
         return bcrypt.verify(password, self.hashed_password)
 
     class Meta:
-        table = "Users"
+        table = "users"
 
 
 Task_Pydantic = pydantic_model_creator(Tasks)
 User_Pydantic = pydantic_model_creator(Users, name="User")
 UserIn_Pydantic = pydantic_model_creator(Users, name="UserIn", exclude_readonly = True)
+
 
