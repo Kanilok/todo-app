@@ -36,7 +36,6 @@
   
   <main>
     <div style="margin:15px">
-      <h1 class="text-2xl">List of tasks</h1>
       <div>
 
         <div class="modal hidden" id="popup-modal">
@@ -57,10 +56,36 @@
               </div>
           </div>
         </div>
-        {tasks}
-        {#each tasks as {description, is_done, id, due_date, add_date, done_date}, i(id)}
-            <Task on:remove={toggleRemoveModal} {description} {is_done} {id} {due_date} {add_date} {done_date} {i} />
-        {/each}
+
+
+        <div class="mb-16 relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-300">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Task name
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Due date
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Done date
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <span class="sr-only">Done</span>
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      <span class="sr-only">Delete</span>
+                  </th>
+                </tr>
+            </thead>
+            <tbody>
+            {#each tasks as {description, is_done, id, due_date, add_date, done_date}, i(id)}
+                <Task on:remove={toggleRemoveModal} {description} {is_done} {id} {due_date} {add_date} {done_date} {i} />
+            {/each}
+            </tbody>
+          </table>
+        </div>
         <NewTask on:onSubmit={submit}/>
       </div>
     </div>  

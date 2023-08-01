@@ -48,33 +48,34 @@
     }
 </script>
 
-
-
-
-<div style="padding:10px"> 
-    <div style="display:inline-block; width:700px">
-        <p style="width:20px; display:inline-block"><b>{i+1}.</b></p>
-        <p style="display:inline-block; color:#0d6efd"> added: {add_date}</p> |
-        {#if is_done && is_late}
-            <p style="display:inline-block; color:#ff781f"> done late: {done_date} </p> |
-        {:else if is_done}
-            <p style="display:inline-block; color:#198754"> done: {done_date} </p> |
-        {:else}
-            <p style="display:inline-block; color:#dc3545"> due: {due_date} </p> |
-        {/if}
-        {#if is_done}
-            <span style="text-decoration: line-through; display:inline-block">{description}</span>
-        {:else if is_late}
-            <span style="display:inline-block; color:red"> YOU'RE LATE - {description}</span>
-        {:else}
-            <span style="display:inline-block">{description}</span>
-        {/if} 
-    </div>
-    {#if is_done}
-        <button class="bg-transparent hover:bg-green-700 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-700 rounded" type="button" on:click={done}>to do</button>
-        <button class="hover:bg-red-500 text-red-500 font-semibold hover:text-black py-2 px-4 border border-red-500 rounded" type="button" on:click={remove}>delete</button>
-    {:else}
-        <button class="hover:bg-green-700 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-700 rounded" type="button" on:click={done}>done</button>
-        <button class="text-red-500 font-semibold py-2 px-4 border border-red-500 rounded opacity-50" type="button" on:click={remove} disabled>delete</button>
-    {/if}
-</div> 
+    <tr class="bg-gray-100 border-b  hover:bg-gray-50 ">
+        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+            {#if is_done}
+                <span style="text-decoration: line-through">{description}</span>
+            {:else if is_late}
+                <span style="color:red">LATE - {description}</span>
+            {:else}
+                <span>{description}</span>
+            {/if} 
+        </th>
+        <td class="px-6 py-4">
+            {due_date}
+        </td>
+        <td class="px-6 py-4">
+            {#if is_done}
+                {done_date}
+            {:else}
+                ----
+            {/if}
+        </td>
+        <td class="px-6 py-4 text-right">
+            {#if is_done}
+                <button class="bg-transparent hover:bg-yellow-600 text-yellow-600 font-semibold hover:text-white py-2 px-4 border border-yellow-700 rounded" type="button" on:click={done}>to do</button>
+            {:else}
+                <button class="hover:bg-green-700 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-700 rounded" type="button" on:click={done}>done</button>
+            {/if}
+        </td>
+        <td class="px-6 py-4 text-right">
+            <button class="hover:bg-red-600 text-red-600 font-semibold hover:text-black py-2 px-4 border border-red-600 rounded" type="button" on:click={remove}>delete</button>
+        </td>
+    </tr>
