@@ -32,9 +32,6 @@
     }
 
     
-    
-
-
     const dispatch = createEventDispatcher();
 
     function remove(){
@@ -45,10 +42,13 @@
         done_date = date.getFullYear() + "-" + String(date.getMonth()+1).padStart(2,"0") + "-" + date.getDate()
         is_done = !is_done;
         fetch("http://127.0.0.1:8000/tasks/is-done/" + id + "/?is_late=" + is_late, {
-            method: 'PUT'
+            method: 'PUT',
+            
         })
     }
 </script>
+
+
 
 
 <div style="padding:10px"> 
@@ -72,9 +72,9 @@
     </div>
     {#if is_done}
         <button class="bg-transparent hover:bg-green-700 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-700 rounded" type="button" on:click={done}>to do</button>
-        <button class="hover:bg-yellow-500 text-yellow-500 font-semibold hover:text-black py-2 px-4 border border-yellow-500 rounded" type="button" on:click={remove}>archive</button>
+        <button class="hover:bg-red-500 text-red-500 font-semibold hover:text-black py-2 px-4 border border-red-500 rounded" type="button" on:click={remove}>delete</button>
     {:else}
         <button class="hover:bg-green-700 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-700 rounded" type="button" on:click={done}>done</button>
-        <button class="text-yellow-500 font-semibold py-2 px-4 border border-yellow-500 rounded opacity-50" type="button" on:click={remove} disabled>archive</button>
+        <button class="text-red-500 font-semibold py-2 px-4 border border-red-500 rounded opacity-50" type="button" on:click={remove} disabled>delete</button>
     {/if}
 </div> 

@@ -4,6 +4,11 @@
     function change(){
         document.getElementById("mobile-menu").classList.toggle("hidden");
     }
+
+    function logOut(){
+        localStorage.removeItem("access_token")
+        window.location.href = '/tasks';
+    }
 </script>
 
 <nav class="bg-gray-800">
@@ -45,9 +50,12 @@
           </div>
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-          <a href="/login" class="rounded border px-3 bg-gray-800 p-2 text-gray-100 hover:bg-white hover:text-gray-900">
-                Log In
-          </a>        
+          <a href="/login" id="login" class="rounded border px-3 bg-gray-800 p-2 text-gray-100 hover:bg-white hover:text-gray-900">
+            Log In
+          </a>
+          <button type="button" id="logout" on:click={logOut} class=" rounded border px-3 bg-gray-800 p-2 text-gray-100 hover:bg-white hover:text-gray-900">
+            Log Out
+          </button>       
         </div>
       </div>
     </div>
