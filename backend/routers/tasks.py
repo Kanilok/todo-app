@@ -1,11 +1,9 @@
-from typing import List
-from .models import Task_Pydantic, User_Pydantic, Tasks, Users
+from typing import List, Union
+from .models import Task_Pydantic, TaskIn_Pydantic, User_Pydantic, Tasks, Users
 from .users import get_current_user
 from tortoise.contrib.fastapi import HTTPNotFoundError
 from fastapi import APIRouter, Depends
 from datetime import date
-
-
 
 router = APIRouter(
     prefix = "/tasks",
@@ -25,16 +23,11 @@ async def get_archived_tasks():
 
 
 @router.post("/", response_model=Task_Pydantic)
-async def create_task(task: str, date: str = "0", user: User_Pydantic = Depends(get_current_user)):
+async def create_task(task: TaskIn_Pydantic, user: User_Pydantic = Depends(get_current_user)):
     user_id = user.dict()["id"]
     user_model = await Users.get(id=user_id)
-    if date == "0":
-        print("case1")
-        task_obj = await Tasks.create(task_name=task, user = user_model)
-    else:
-        print("case2")
-        task_obj = await Tasks.create(task_name=task, due_date=date, user = user_model)
 
+    task_obj = await Tasks.create(task_name = task.task_name, due_date = task.due_date, user = user_model)
     return await Task_Pydantic.from_tortoise_orm(task_obj)
 
 

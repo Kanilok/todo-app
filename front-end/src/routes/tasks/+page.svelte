@@ -4,10 +4,8 @@
     
     export let is_fetched = false
     let tasks = [];
-    let count = 1;
 
     async function fetchDataWithToken(token) {
-        count++
         await fetch('http://127.0.0.1:8000/tasks', {
                 headers: {
                 Authorization: `Bearer ${token}`,
@@ -25,7 +23,6 @@
                             due_date: data[i].due_date,
                             done_date: data[i].done_date
                         })
-                
                 }
                 is_fetched = true
             }).catch(error => {
@@ -42,7 +39,6 @@
 </script>
 
 {#if is_fetched}
-    {count}
     <Tasks on:reFetch={() => (fetchDataWithToken(localStorage.getItem("access_token")))} {tasks}/>
 {:else}
     <h1 class="text-3xl p-2">You are not logged in</h1>

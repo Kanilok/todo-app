@@ -1,6 +1,5 @@
 import jwt
 from .models import User_Pydantic, UserIn_Pydantic, Users
-from pydantic import BaseModel
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.hash import bcrypt
@@ -15,10 +14,6 @@ router = APIRouter(
 JWT_SECRET = "idkwhatisasecret"
 ALGORITHM = "HS256"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl = "users/login")
-
-class User(BaseModel):
-    username: str
-    hashed_password: str
 
 
 @router.post("/", response_model=User_Pydantic)

@@ -31,7 +31,8 @@ class Tasks(models.Model):
         table = "tasks"
 
 
-Task_Pydantic = pydantic_model_creator(Tasks)
+Task_Pydantic = pydantic_model_creator(Tasks, name="Task")
+TaskIn_Pydantic = pydantic_model_creator(Tasks, name="TaskIn", exclude_readonly = True)
 User_Pydantic = pydantic_model_creator(Users, name="User")
 UserIn_Pydantic = pydantic_model_creator(Users, name="UserIn", exclude_readonly = True)
 
