@@ -26,8 +26,7 @@ async def get_archived_tasks():
 async def create_task(task: TaskIn_Pydantic, user: User_Pydantic = Depends(get_current_user)):
     user_id = user.dict()["id"]
     user_model = await Users.get(id=user_id)
-
-    task_obj = await Tasks.create(task_name = task.task_name, due_date = task.due_date, user = user_model)
+    task_obj = await Tasks.create(task_name = task.task_name, due_date = task.due_date, description = task.description, user = user_model)
     return await Task_Pydantic.from_tortoise_orm(task_obj)
 
 

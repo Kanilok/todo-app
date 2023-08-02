@@ -9,3 +9,4 @@
 /front-end/!.env.example
 /front-end/vite.config.js.timestamp-*
 /front-end/vite.config.ts.timestamp-*
+/front-end/src/routes/tasks/TODO.txt

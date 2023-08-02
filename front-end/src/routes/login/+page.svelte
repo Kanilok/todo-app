@@ -4,9 +4,10 @@
     let repeated_password;
     let error_message;
     let login_message = "Login"
+    let SERWER_URL = "http://127.0.0.1:8000"
 
     async function logIn(){
-        await fetch(`http://127.0.0.1:8000/users/login`, {
+        await fetch(SERWER_URL + "/users/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
@@ -27,7 +28,7 @@
 
     async function register(){
         if(password == repeated_password){
-            await fetch("http://127.0.0.1:8000/users", {
+            await fetch(SERWER_URL + "/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

@@ -6,6 +6,7 @@
     export let id;
     export let due_date;
     export let done_date;
+    export let SERWER_URL;
 
     const date = new Date()
 
@@ -42,7 +43,7 @@
     function done(){
         done_date = date.getFullYear() + "-" + String(date.getMonth()+1).padStart(2,"0") + "-" + date.getDate()
         is_done = !is_done;
-        fetch("http://127.0.0.1:8000/tasks/is-done/" + id + "/?is_late=" + is_late, {
+        fetch(SERWER_URL + "/tasks/is-done/" + id + "/?is_late=" + is_late, {
             method: 'PUT',
             
         })

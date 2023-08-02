@@ -2,11 +2,12 @@
     import { onMount } from 'svelte';
     import Tasks from "./Tasks.svelte";
     
-    export let is_fetched = false
+    let is_fetched = false;
     let tasks = [];
+    const SERWER_URL = "http://127.0.0.1:8000";
 
     async function fetchDataWithToken(token) {
-        await fetch('http://127.0.0.1:8000/tasks', {
+        await fetch(SERWER_URL + '/tasks', {
                 headers: {
                 Authorization: `Bearer ${token}`,
                 }
@@ -39,7 +40,7 @@
 </script>
 
 {#if is_fetched}
-    <Tasks on:reFetch={() => (fetchDataWithToken(localStorage.getItem("access_token")))} {tasks}/>
+    <Tasks on:reFetch={() => (fetchDataWithToken(localStorage.getItem("access_token")))} {tasks} {SERWER_URL}/>
 {:else}
     <h1 class="text-3xl p-2">You are not logged in</h1>
 {/if}

@@ -4,6 +4,7 @@
     import { createEventDispatcher } from "svelte";
 
     export let tasks;
+    export let SERWER_URL;
     let removeId;
 
     const dispatch = createEventDispatcher();
@@ -15,7 +16,7 @@
 
     function remove(){
         tasks = tasks.filter(task => task.id != removeId)
-        fetch("http://127.0.0.1:8000/tasks/archived/" + removeId,{
+        fetch(SERWER_URL + "/tasks/archived/" + removeId,{
             method: 'PUT'
         })
         document.getElementById("popup-modal").classList.toggle("hidden")
@@ -23,16 +24,16 @@
 
     function submit({detail}){
         const token = localStorage.getItem("access_token")
-          console.log(detail.date)
-          fetch("http://127.0.0.1:8000/tasks" ,{
+          fetch(SERWER_URL + "/tasks" ,{
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
                 },
             body: JSON.stringify({
-              task_name: detail.description,
-              due_date: detail.date
+              task_name: detail.task_name,
+              due_date: detail.date,
+              description: detail.description
             })
           })
         dispatch("reFetch")
@@ -87,7 +88,7 @@
             </thead>
             <tbody>
             {#each tasks as {task_name, is_done, id, due_date, done_date}}
-                <Task on:remove={toggleRemoveModal} {task_name} {is_done} {id} {due_date} {done_date} />
+                <Task on:remove={toggleRemoveModal} {task_name} {is_done} {id} {due_date} {done_date} {SERWER_URL}/>
             {/each}
             </tbody>
           </table>
