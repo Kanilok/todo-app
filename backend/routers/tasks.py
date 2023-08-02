@@ -25,10 +25,16 @@ async def get_archived_tasks():
 
 
 @router.post("/", response_model=Task_Pydantic)
-async def create_task(task: str, date: str, user: User_Pydantic = Depends(get_current_user)):
+async def create_task(task: str, date: str = "0", user: User_Pydantic = Depends(get_current_user)):
     user_id = user.dict()["id"]
     user_model = await Users.get(id=user_id)
-    task_obj = await Tasks.create(description=task, due_date=date, user = user_model)
+    if date == "0":
+        print("case1")
+        task_obj = await Tasks.create(task_name=task, user = user_model)
+    else:
+        print("case2")
+        task_obj = await Tasks.create(task_name=task, due_date=date, user = user_model)
+
     return await Task_Pydantic.from_tortoise_orm(task_obj)
 
 

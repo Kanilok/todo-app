@@ -1,35 +1,36 @@
 <script>
     import { createEventDispatcher } from "svelte";
 
-    export let description;
+    export let task_name;
     export let is_done;
     export let id;
     export let due_date;
-    export let add_date;
     export let done_date;
-    export let i;
 
     const date = new Date()
 
     // checking if due_date has already passed
     let is_late = false
-    let due_year = due_date.substring(0,4)
-    let due_month = due_date.substring(5,7)
-    if(due_month.substring(0,1) == 0){due_month = due_month.substring(1,2)}
-    let due_day = due_date.substring(8,10)
-    if(due_day.substring(0,1) == 0){due_day = due_day.substring(1,2)}
-    
-    if(due_year < date.getFullYear()){
-        is_late = true
-    } else if(due_year == date.getFullYear()){
-        if(due_month < (date.getMonth() + 1)){
+    if (due_date != null){
+        let due_year = due_date.substring(0,4)
+        let due_month = due_date.substring(5,7)
+        if(due_month.substring(0,1) == 0){due_month = due_month.substring(1,2)}
+        let due_day = due_date.substring(8,10)
+        if(due_day.substring(0,1) == 0){due_day = due_day.substring(1,2)}
+        
+        if(due_year < date.getFullYear()){
             is_late = true
-        } else if(due_month == (date.getMonth() + 1)){
-            if(due_day < date.getDate()){
+        } else if(due_year == date.getFullYear()){
+            if(due_month < (date.getMonth() + 1)){
                 is_late = true
+            } else if(due_month == (date.getMonth() + 1)){
+                if(due_day < date.getDate()){
+                    is_late = true
+                }
             }
         }
     }
+    
 
     
     const dispatch = createEventDispatcher();
@@ -51,15 +52,19 @@
     <tr class="bg-gray-100 border-b  hover:bg-gray-50 ">
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
             {#if is_done}
-                <span style="text-decoration: line-through">{description}</span>
+                <span style="text-decoration: line-through">{task_name}</span>
             {:else if is_late}
-                <span style="color:red">LATE - {description}</span>
+                <span style="color:red">LATE - {task_name}</span>
             {:else}
-                <span>{description}</span>
+                <span>{task_name}</span>
             {/if} 
         </th>
         <td class="px-6 py-4">
-            {due_date}
+            {#if due_date != null}
+                {due_date}
+            {:else}
+                ----
+            {/if}
         </td>
         <td class="px-6 py-4">
             {#if is_done}

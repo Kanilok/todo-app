@@ -1,0 +1,4 @@
+name and logout shown when user is logged in
+auto re-fetch after updates (especially after new task)
+task description (optional)
+due date (optional)

@@ -17,9 +17,10 @@ class Users(models.Model):
 
 class Tasks(models.Model):
     id = fields.IntField(pk=True)
-    description = fields.CharField(max_length = 50)
+    task_name = fields.CharField(max_length = 50)
+    description = fields.CharField(max_length = 200, null = True)
     is_done = fields.BooleanField(default = False)
-    due_date = fields.data.DateField()
+    due_date = fields.data.DateField(null = True)
     add_date = fields.data.DatetimeField(auto_now_add = True)
     done_date = fields.data.DateField(null = True)
     done_on_time = fields.BooleanField(null = True)

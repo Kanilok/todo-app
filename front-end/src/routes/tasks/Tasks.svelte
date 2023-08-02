@@ -23,12 +23,21 @@
 
     function submit({detail}){
         const token = localStorage.getItem("access_token")
-        fetch("http://127.0.0.1:8000/tasks/?task=" + detail.description + "&date=" + detail.date ,{
+        if(detail.date == undefined){
+          fetch("http://127.0.0.1:8000/tasks/?task=" + detail.description,{
             method: 'POST',
             headers: {
             Authorization: `Bearer ${token}`,
             }
-        })
+          })
+        } else {
+          fetch("http://127.0.0.1:8000/tasks/?task=" + detail.description + "&date=" + detail.date ,{
+            method: 'POST',
+            headers: {
+            Authorization: `Bearer ${token}`,
+            }
+          })
+        }
         dispatch("reFetch")
     }
   </script>
@@ -80,8 +89,8 @@
                 </tr>
             </thead>
             <tbody>
-            {#each tasks as {description, is_done, id, due_date, add_date, done_date}, i(id)}
-                <Task on:remove={toggleRemoveModal} {description} {is_done} {id} {due_date} {add_date} {done_date} {i} />
+            {#each tasks as {task_name, is_done, id, due_date, done_date}, i(id)}
+                <Task on:remove={toggleRemoveModal} {task_name} {is_done} {id} {due_date} {done_date} />
             {/each}
             </tbody>
           </table>

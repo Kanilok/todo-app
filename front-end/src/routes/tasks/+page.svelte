@@ -20,10 +20,9 @@
             }).then(data => {
                 for(let i in data){
                 tasks.push({id: data[i].id, 
-                            description: data[i].description,
+                            task_name: data[i].task_name,
                             is_done: data[i].is_done,
                             due_date: data[i].due_date,
-                            add_date: data[i].add_date.substring(0,10),
                             done_date: data[i].done_date
                         })
                 
