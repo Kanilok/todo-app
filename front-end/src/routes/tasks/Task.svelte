@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher } from "svelte";
+    import { editStore } from "../store.js"
 
     export let SERWER_URL;
     export let task_name;
@@ -42,7 +43,7 @@
     }
 
     function edit(){
-        console.log("edit")
+        editStore.set({task_name:task_name, description:description, due_date:due_date, id:id})
     }
 
     function done(){

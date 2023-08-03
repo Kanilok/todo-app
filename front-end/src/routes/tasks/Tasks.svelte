@@ -44,6 +44,21 @@
           })
         dispatch("reFetch")
     }
+
+    function edit({detail}){
+      fetch(SERWER_URL + "/tasks/" + detail.id, {
+        method: 'PUT',
+            headers: {
+                "Content-Type": "application/json"
+                },
+            body: JSON.stringify({
+              task_name: detail.task_name,
+              due_date: detail.date,
+              description: detail.description
+            })
+      })
+      dispatch("reFetch")
+    }
   </script>
   
   
@@ -102,7 +117,7 @@
             </tbody>
           </table>
         </div>
-        <NewTask on:onSubmit={submit}/>
+        <NewTask on:onSubmit={submit} on:edit={edit}/>
       </div>
     </div>  
   </main>

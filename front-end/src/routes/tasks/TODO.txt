@@ -1,6 +1,5 @@
 nowy zapis await fetch???
 
-name and logout shown when user is logged in
 edycja niezrobionych tasków
 password checker 
 nowy admin tylko w UI

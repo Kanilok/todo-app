@@ -31,6 +31,14 @@ async def create_task(task: TaskIn_Pydantic, user: User_Pydantic = Depends(get_c
 
 
 @router.put(
+    "/{task_id}", response_model=Task_Pydantic, responses={404: {"model": HTTPNotFoundError}}
+)
+async def update_status(task_id: int, task: TaskIn_Pydantic):
+    await Tasks.filter(id=task_id).update(task_name = task.task_name, due_date = task.due_date, description = task.description)
+    return await Task_Pydantic.from_queryset_single(Tasks.get(id=task_id))
+
+
+@router.put(
     "/is-done/{task_id}", response_model=Task_Pydantic, responses={404: {"model": HTTPNotFoundError}}
 )
 async def update_status(task_id: int, is_late: bool):
