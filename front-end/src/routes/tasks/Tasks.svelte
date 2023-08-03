@@ -2,7 +2,7 @@
     import Task from "./Task.svelte";
     import NewTask from "./NewTask.svelte";
     import { createEventDispatcher } from "svelte";
-    import { myStore } from './store.js';
+    import { taskStore } from '../store.js';
 
     export let SERWER_URL;
 
@@ -11,7 +11,7 @@
     const dispatch = createEventDispatcher();
 
 
-    myStore.subscribe(value => {
+    taskStore.subscribe(value => {
       tasks = value
     });
 

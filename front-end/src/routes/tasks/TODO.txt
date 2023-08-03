@@ -1,9 +1,8 @@
 nowy zapis await fetch???
-auto re-fetch after updates (especially after new task)
-
 
 name and logout shown when user is logged in
-password checker 
 edycja niezrobionych tasków
+password checker 
 nowy admin tylko w UI
 konto admina ma zakladke users z filtracją
+naprawic done w nowym tasku

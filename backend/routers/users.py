@@ -83,6 +83,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     return await User_Pydantic.from_tortoise_orm(user)
         
 
-@router.get("/me", response_model = User_Pydantic)
+@router.get("/", response_model = str)
 async def get_user(user: User_Pydantic = Depends(get_current_user)):
-    return user 
+    return user.username

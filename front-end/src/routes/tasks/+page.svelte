@@ -1,6 +1,8 @@
 <script>
     import { onMount } from 'svelte';
-    import { myStore } from "./store.js"
+    import { taskStore } from "../store.js"
+    import { logStore } from "../store.js"
+
     import Tasks from "./Tasks.svelte";
     
     let is_fetched = false;
@@ -8,9 +10,24 @@
 
     async function fetchDataWithToken(token) {
         let tasks = [];
+        await fetch(SERWER_URL + '/users', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }).then(response => {
+                if(!response.ok){
+                    throw new Error("You are not logged in")
+                }
+                return response.json()
+            }).then(data => {
+                logStore.set({logged: true, username: data})
+            }).catch(error => {
+                console.error('Error fetching data:', error);
+            });
+
         await fetch(SERWER_URL + '/tasks', {
                 headers: {
-                Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                 }
             }).then(response => {
                 if(!response.ok){
@@ -28,7 +45,7 @@
                         })
                 }
                 is_fetched = true
-                myStore.set(tasks)
+                taskStore.set(tasks)
             }).catch(error => {
                 console.error('Error fetching data:', error);
             });

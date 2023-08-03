@@ -1,5 +1,16 @@
 <script>
     import "../app.css";
+    import { logStore } from "./store.js"
+
+    logStore.set({logged: false, username: ""})
+
+    let is_logged = false;
+    let username;
+    logStore.subscribe(value => {
+        is_logged = value.logged
+        username = value.username
+        
+    })
 
     function change(){
         document.getElementById("mobile-menu").classList.toggle("hidden");
@@ -7,6 +18,7 @@
 
     function logOut(){
         localStorage.removeItem("access_token")
+        logStore.set({"logged": false, "username": ""})
         window.location.href = '/tasks';
     }
 </script>
@@ -50,12 +62,16 @@
           </div>
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-          <a href="/login" id="login" class="rounded border px-3 bg-gray-800 p-2 text-gray-100 hover:bg-white hover:text-gray-900">
-            Log In
-          </a>
-          <button type="button" id="logout" on:click={logOut} class=" rounded border px-3 bg-gray-800 p-2 text-gray-100 hover:bg-white hover:text-gray-900">
-            Log Out
-          </button>       
+          {#if is_logged}
+            <p class="text-gray-100 px-4">{username}</p>
+            <button type="button" id="logout" on:click={logOut} class=" rounded border px-3 bg-gray-800 p-2 text-gray-100 hover:bg-white hover:text-gray-900">
+                Log Out
+            </button> 
+          {:else}
+            <a href="/login" id="login" class="rounded border px-3 bg-gray-800 p-2 text-gray-100 hover:bg-white hover:text-gray-900">
+                Log In
+            </a>
+          {/if}
         </div>
       </div>
     </div>

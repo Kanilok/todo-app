@@ -1,4 +1,6 @@
 <script>
+    import { logStore } from "../store.js"
+
     let username;
     let password;
     let repeated_password;
@@ -20,6 +22,7 @@
                 }
             }).then(data => {
                 localStorage.setItem("access_token", data.access_token)
+                logStore.set({logged: true, username: username})
                 document.getElementById("popup-modal").classList.toggle("hidden")
             }).catch(error => {
                 console.log(error)
