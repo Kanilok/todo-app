@@ -87,8 +87,8 @@
                 </tr>
             </thead>
             <tbody>
-            {#each tasks as {task_name, is_done, id, due_date, done_date}}
-                <Task on:remove={toggleRemoveModal} {task_name} {is_done} {id} {due_date} {done_date} {SERWER_URL}/>
+            {#each tasks as {task_name, description, is_done, id, due_date, done_date}}
+                <Task on:remove={toggleRemoveModal} {task_name} {description} {is_done} {id} {due_date} {done_date} {SERWER_URL}/>
             {/each}
             </tbody>
           </table>

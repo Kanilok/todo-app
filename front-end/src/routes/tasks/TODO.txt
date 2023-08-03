@@ -1,6 +1,5 @@
 name and logout shown when user is logged in
 auto re-fetch after updates (especially after new task)
-task description (optional) 
 password checker 
 adres serwera = zmienna evironment
 nowy zapis await fetch???

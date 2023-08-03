@@ -11,6 +11,9 @@
         if(date == ""){
             date = undefined
         }
+        if(description == ""){
+            description = undefined
+        }
         dispatch("onSubmit", {task_name:task_name, date:date, description:description})
     }
 </script>

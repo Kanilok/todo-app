@@ -20,6 +20,7 @@
                 for(let i in data){
                 tasks.push({id: data[i].id, 
                             task_name: data[i].task_name,
+                            description: data[i].description,
                             is_done: data[i].is_done,
                             due_date: data[i].due_date,
                             done_date: data[i].done_date

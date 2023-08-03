@@ -2,11 +2,13 @@
     import { createEventDispatcher } from "svelte";
 
     export let task_name;
+    export let description
     export let is_done;
     export let id;
     export let due_date;
     export let done_date;
     export let SERWER_URL;
+
 
     const date = new Date()
 
@@ -48,10 +50,14 @@
             
         })
     }
+
+    function toggleDescription(){
+        document.getElementById("description"+id).classList.toggle("hidden")
+    }
 </script>
 
-    <tr class="bg-gray-100 border-b  hover:bg-gray-50 ">
-        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+    <tr on:click={toggleDescription} class="bg-gray-100 border-b  hover:bg-gray-50 ">
+        <th  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
             {#if is_done}
                 <span style="text-decoration: line-through">{task_name}</span>
             {:else if is_late}
@@ -85,3 +91,18 @@
             <button class="hover:bg-red-600 text-red-600 font-semibold hover:text-black py-2 px-4 border border-red-600 rounded" type="button" on:click={remove}>delete</button>
         </td>
     </tr>
+
+    {#if description != null}
+        <tr id="description{id}" class="hidden">
+            <td colspan="100">
+                <p class="p-2 m-2 w-full">Description: {description}</p>
+            </td>
+        </tr>
+    {:else}
+    <tr id="description{id}" class="hidden">
+        <td colspan="100">
+            <p class="p-2 m-2 w-full">No description</p>
+        </td>
+    </tr>
+    {/if}
+
