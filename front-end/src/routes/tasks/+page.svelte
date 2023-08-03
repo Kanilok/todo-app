@@ -1,12 +1,13 @@
 <script>
     import { onMount } from 'svelte';
+    import { myStore } from "./store.js"
     import Tasks from "./Tasks.svelte";
     
     let is_fetched = false;
-    let tasks = [];
     const SERWER_URL = "http://127.0.0.1:8000";
 
     async function fetchDataWithToken(token) {
+        let tasks = [];
         await fetch(SERWER_URL + '/tasks', {
                 headers: {
                 Authorization: `Bearer ${token}`,
@@ -27,6 +28,7 @@
                         })
                 }
                 is_fetched = true
+                myStore.set(tasks)
             }).catch(error => {
                 console.error('Error fetching data:', error);
             });
@@ -41,7 +43,7 @@
 </script>
 
 {#if is_fetched}
-    <Tasks on:reFetch={() => (fetchDataWithToken(localStorage.getItem("access_token")))} {tasks} {SERWER_URL}/>
+    <Tasks on:reFetch={() => (fetchDataWithToken(localStorage.getItem("access_token")))} {SERWER_URL}/>
 {:else}
     <h1 class="text-3xl p-2">You are not logged in</h1>
 {/if}

@@ -2,12 +2,18 @@
     import Task from "./Task.svelte";
     import NewTask from "./NewTask.svelte";
     import { createEventDispatcher } from "svelte";
+    import { myStore } from './store.js';
 
-    export let tasks;
     export let SERWER_URL;
-    let removeId;
 
+    let tasks;
+    let removeId;
     const dispatch = createEventDispatcher();
+
+
+    myStore.subscribe(value => {
+      tasks = value
+    });
 
     function toggleRemoveModal({detail}){
       document.getElementById("popup-modal").classList.toggle("hidden")
@@ -69,7 +75,7 @@
           <table class="w-full text-sm text-left text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-300">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="w-64 px-6 py-3">
                         Task name
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -83,12 +89,15 @@
                     </th>
                     <th scope="col" class="px-6 py-3">
                       <span class="sr-only">Delete</span>
-                  </th>
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      <span class="sr-only">Edit</span>
+                    </th>
                 </tr>
             </thead>
             <tbody>
             {#each tasks as {task_name, description, is_done, id, due_date, done_date}}
-                <Task on:remove={toggleRemoveModal} {task_name} {description} {is_done} {id} {due_date} {done_date} {SERWER_URL}/>
+                <Task on:reFetch={() => dispatch("reFetch")} on:remove={toggleRemoveModal} {task_name} {description} {is_done} {id} {due_date} {done_date} {SERWER_URL}/>
             {/each}
             </tbody>
           </table>

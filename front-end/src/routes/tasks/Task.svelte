@@ -1,14 +1,13 @@
 <script>
     import { createEventDispatcher } from "svelte";
 
+    export let SERWER_URL;
     export let task_name;
-    export let description
+    export let description;
     export let is_done;
     export let id;
     export let due_date;
     export let done_date;
-    export let SERWER_URL;
-
 
     const date = new Date()
 
@@ -42,13 +41,15 @@
         dispatch("remove", id)
     }
 
+    function edit(){
+        console.log("edit")
+    }
+
     function done(){
-        done_date = date.getFullYear() + "-" + String(date.getMonth()+1).padStart(2,"0") + "-" + date.getDate()
-        is_done = !is_done;
         fetch(SERWER_URL + "/tasks/is-done/" + id + "/?is_late=" + is_late, {
-            method: 'PUT',
-            
+            method: 'PUT'
         })
+        dispatch("reFetch")
     }
 
     function toggleDescription(){
@@ -56,8 +57,8 @@
     }
 </script>
 
-    <tr on:click={toggleDescription} class="bg-gray-100 border-b  hover:bg-gray-50 ">
-        <th  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+    <tr class="bg-gray-100 border-b  hover:bg-gray-50 ">
+        <th on:click={toggleDescription} class="w-64 px-6 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
             {#if is_done}
                 <span style="text-decoration: line-through">{task_name}</span>
             {:else if is_late}
@@ -80,29 +81,30 @@
                 ----
             {/if}
         </td>
-        <td class="px-6 py-4 text-right">
+        <td class=" py-4 text-center">
             {#if is_done}
-                <button class="bg-transparent hover:bg-yellow-600 text-yellow-600 font-semibold hover:text-white py-2 px-4 border border-yellow-700 rounded" type="button" on:click={done}>to do</button>
+                <button class="bg-transparent hover:bg-yellow-600 text-yellow-600 font-semibold hover:text-white py-2 px-4 border border-yellow-600 rounded" type="button" on:click={done}>to do</button>
             {:else}
                 <button class="hover:bg-green-700 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-700 rounded" type="button" on:click={done}>done</button>
             {/if}
         </td>
-        <td class="px-6 py-4 text-right">
-            <button class="hover:bg-red-600 text-red-600 font-semibold hover:text-black py-2 px-4 border border-red-600 rounded" type="button" on:click={remove}>delete</button>
+        <td class=" py-4 text-center">
+            <button class="hover:bg-red-600 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-600 rounded" type="button" on:click={remove}>delete</button>
+        </td>
+        <td class=" py-4 text-center">
+            <button class="hover:bg-blue-600 text-blue-600 font-semibold hover:text-white py-2 px-4 border border-blue-600 rounded" type="button" on:click={edit}>edit</button>
         </td>
     </tr>
 
-    {#if description != null}
-        <tr id="description{id}" class="hidden">
-            <td colspan="100">
-                <p class="p-2 m-2 w-full">Description: {description}</p>
-            </td>
-        </tr>
-    {:else}
+    
     <tr id="description{id}" class="hidden">
         <td colspan="100">
-            <p class="p-2 m-2 w-full">No description</p>
+            {#if description != null}
+                <p class="p-2 m-2 w-full">Description: {description}</p>
+            {:else}
+                <p class="p-2 m-2 w-full">No description</p>
+            {/if}
         </td>
     </tr>
-    {/if}
+   
 
