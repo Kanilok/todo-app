@@ -1,5 +1,3 @@
 nowy zapis await fetch???
 
-nowy admin tylko w UI
-konto admina ma zakladke users z filtracją
 naprawic done w nowym tasku

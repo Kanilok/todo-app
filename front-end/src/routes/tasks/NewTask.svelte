@@ -17,8 +17,10 @@
             date = data.due_date
             id = data.id
 
-            document.getElementById("edit").classList.toggle("hidden")
+            document.getElementById("edit").classList.remove("hidden")
         })  
+
+        document.getElementById("edit").classList.add("hidden")
     })
     
 
@@ -71,6 +73,6 @@
     </div> 
     
     <button type="submit" class="hover:bg-blue-700 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-700 rounded">Add new task</button>
-    <button on:click={edit} id="edit" type="button" class=" hover:bg-blue-700 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-700 rounded">Save edit</button>
+    <button on:click={edit} id="edit" type="button" class="hidden hover:bg-blue-700 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-700 rounded">Save edit</button>
 </form>
 
