@@ -7,6 +7,8 @@ class Users(models.Model):
     id = fields.IntField(pk=True)
     username = fields.CharField(max_length = 25, unique = True)
     hashed_password = fields.CharField(max_length = 100)
+    verified = fields.BooleanField(default = False)
+    admin = fields.BooleanField(default = False)
 
     def verify_password(self, password):
         return bcrypt.verify(password, self.hashed_password)

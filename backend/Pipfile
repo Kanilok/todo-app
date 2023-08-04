@@ -12,6 +12,7 @@ python-multipart = "*"
 bcrypt = "*"
 passlib = "*"
 pyjwt = "*"
+password-strength = "*"
 
 [dev-packages]
 

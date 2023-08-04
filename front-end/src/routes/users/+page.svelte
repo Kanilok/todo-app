@@ -1,16 +1,14 @@
 <script>
     import { onMount } from 'svelte';
-    import { taskStore } from "../store.js"
     import { logStore } from "../store.js"
-
-    import Tasks from "./Tasks.svelte";
+    import Users from "./Users.svelte"
     
     let is_fetched = false;
-    let verified = false;
     const SERWER_URL = "http://127.0.0.1:8000";
+    let users = [];
 
-    async function fetchDataWithToken(token) {
-        let tasks = [];
+    async function fetchUsers(token) {
+
         await fetch(SERWER_URL + '/users/current', {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -21,53 +19,41 @@
                 }
                 return response.json()
             }).then(data => {
-                verified = data.verified
                 logStore.set({logged: true, username: data.username, admin: data.admin})
             }).catch(error => {
                 console.error('Error fetching data:', error);
             });
 
-        if(verified){
-            await fetch(SERWER_URL + '/tasks', {
-                headers: {
+        await fetch(SERWER_URL + '/users', {
+            headers: {
                     Authorization: `Bearer ${token}`,
                 }
-            }).then(response => {
+        }).then(response => {
                 if(!response.ok){
-                    console.log(response.status)
-                    throw new Error("You are not logged in")
+                    throw new Error("something went wrong")
                 }
                 return response.json()
             }).then(data => {
                 for(let i in data){
-                tasks.push({id: data[i].id, 
-                            task_name: data[i].task_name,
-                            description: data[i].description,
-                            is_done: data[i].is_done,
-                            due_date: data[i].due_date,
-                            done_date: data[i].done_date
+                users.push({id: data[i].id, 
+                            username: data[i].username,
+                            verified: data[i].verified
                         })
                 }
                 is_fetched = true
-                taskStore.set(tasks)
             }).catch(error => {
                 console.error('Error fetching data:', error);
             });
-        } 
     }
 
     onMount(() => {
         const token = localStorage.getItem("access_token")
 
-        fetchDataWithToken(token);
+        fetchUsers(token);
     });
     
 </script>
 
 {#if is_fetched}
-    <Tasks on:reFetch={() => (fetchDataWithToken(localStorage.getItem("access_token")))} {SERWER_URL}/>
-{:else if !verified}
-    <h1 class="text-3xl p-2">You are not verified by admin</h1>
-{:else}
-    <h1 class="text-3xl p-2">You are not logged in</h1>
+    <Users {users} {SERWER_URL}/>
 {/if}

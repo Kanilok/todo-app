@@ -1,7 +1,5 @@
 nowy zapis await fetch???
 
-edycja niezrobionych tasków
-password checker 
 nowy admin tylko w UI
 konto admina ma zakladke users z filtracją
 naprawic done w nowym tasku

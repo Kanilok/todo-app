@@ -32,6 +32,10 @@
             description = undefined
         }
         dispatch("onSubmit", {task_name:task_name, date:date, description:description})
+        task_name = ""
+        description = ""
+        date = ""
+        document.getElementById("edit").classList.add("hidden")
     }
 
     function edit(){
@@ -45,7 +49,7 @@
         task_name = ""
         description = ""
         date = ""
-        document.getElementById("edit").classList.toggle("hidden")
+        document.getElementById("edit").classList.add("hidden")
     }
 </script>
 

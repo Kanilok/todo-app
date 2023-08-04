@@ -1,6 +1,4 @@
 <script>
-    import { logStore } from "../store.js"
-
     let username;
     let password;
     let repeated_password;
@@ -16,13 +14,12 @@
             }).then(response => {
                 if(!response.ok){
                     error_message = "Invalid username or password."
-                    changeError()
+                    showError()
                 } else {
                     return response.json()
                 }
             }).then(data => {
                 localStorage.setItem("access_token", data.access_token)
-                logStore.set({logged: true, username: username})
                 document.getElementById("popup-modal").classList.toggle("hidden")
             }).catch(error => {
                 console.log(error)
@@ -41,18 +38,21 @@
                 }).then(response => {
                     if(response.status == 409){
                         error_message = "Username already taken."
-                        changeError()
+                        showError()
+                    } else if (response.status == 406){
+                        error_message = "Password must be 8 characters long, contain a number, a symbol and an uppercase letter"
+                        showError()
                     }
                     return response.json()
-                }).then(() => {
-                    login_message = "Registration"
-                    logIn()
+                }).then(response => {
+                        login_message = "Registration"
+                        logIn()               
                 }).catch(error => {
-                console.log(error)
+                    console.log(error)
                 });
         } else {
             error_message = "Passwords are not the same."
-            changeError()
+            showError()
         }
     }
 
@@ -64,13 +64,13 @@
         log_form.classList.toggle("hidden");
     }
 
-    function changeError(){
-        document.getElementById("toast-danger").classList.toggle("hidden");
+    function showError(){
+        document.getElementById("toast-danger").classList.remove("hidden");
     }
 
 </script>
 
-<div id="toast-danger" class="hidden flex items-center w-full ml-auto mr-auto mt-8 max-w-xs p-4 text-red-800 bg-white rounded-lg border border-red-600" style="margin-bottom: -2em" role="alert">
+<div id="toast-danger" class="hidden flex items-center w-full ml-auto mr-auto mt-8 max-w-sm p-4 text-red-800 bg-white rounded-lg border border-red-600" style="margin-bottom: -2em" role="alert">
     <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg ">
         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
@@ -78,7 +78,7 @@
         <span class="sr-only">Error icon</span>
     </div>
     <div class="ml-3 text-md font-normal">{error_message}</div>
-    <button on:click={changeError} type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8" data-dismiss-target="#toast-danger" aria-label="Close">
+    <button on:click={() => document.getElementById("toast-danger").classList.add("hidden")} type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8" data-dismiss-target="#toast-danger" aria-label="Close">
         <span class="sr-only">Close</span>
         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>

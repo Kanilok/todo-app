@@ -3,8 +3,16 @@ from .models import User_Pydantic, UserIn_Pydantic, Users
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.hash import bcrypt
+from password_strength import PasswordPolicy
 from datetime import datetime, timedelta
+from typing import List
 
+policy = PasswordPolicy.from_names(
+    length=8,
+    uppercase=1,
+    numbers=1,  
+    special=1 
+)
 
 router = APIRouter(
     prefix = "/users",
@@ -21,9 +29,35 @@ async def create_user(user: UserIn_Pydantic):
     try:
         await Users.get(username = user.username)
     except:
-        user_obj = Users(username = user.username, hashed_password = bcrypt.hash(user.hashed_password))
-        await user_obj.save()
-        return await User_Pydantic.from_tortoise_orm(user_obj)
+        if(policy.test(user.hashed_password) == []):
+            user_obj = Users(username = user.username, hashed_password = bcrypt.hash(user.hashed_password))
+            await user_obj.save()
+            return await User_Pydantic.from_tortoise_orm(user_obj)
+        else:
+            raise HTTPException(
+                status_code = status.HTTP_406_NOT_ACCEPTABLE,
+                detail = "password is too weak"
+            )
+    else:
+        raise HTTPException(
+            status_code = status.HTTP_409_CONFLICT,
+            detail = "username already taken"
+        )
+
+@router.post("/admin", response_model=User_Pydantic)
+async def create_user(user: UserIn_Pydantic):
+    try:
+        await Users.get(username = user.username)
+    except:
+        if(policy.test(user.hashed_password) == []):
+            user_obj = Users(username = user.username, hashed_password = bcrypt.hash(user.hashed_password), verified = True, admin = True)
+            await user_obj.save()
+            return await User_Pydantic.from_tortoise_orm(user_obj)
+        else:
+            raise HTTPException(
+                status_code = status.HTTP_406_NOT_ACCEPTABLE,
+                detail = "password is too weak"
+            )
     else:
         raise HTTPException(
             status_code = status.HTTP_409_CONFLICT,
@@ -63,7 +97,7 @@ async def generate_token(form_data: OAuth2PasswordRequestForm = Depends()):
     
     user_obj = await User_Pydantic.from_tortoise_orm(user)
 
-    access_token_expires = timedelta(minutes=15)
+    access_token_expires = timedelta(minutes=60)
     access_token = create_jwt_token(
         data={"sub": user_obj.dict()["username"]}, expires_delta=access_token_expires
     )
@@ -83,6 +117,16 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     return await User_Pydantic.from_tortoise_orm(user)
         
 
-@router.get("/", response_model = str)
+@router.get("/current", response_model = User_Pydantic)
 async def get_user(user: User_Pydantic = Depends(get_current_user)):
-    return user.username
+    return user
+
+@router.get("/", response_model=List[User_Pydantic])
+async def get_users(user: User_Pydantic = Depends(get_current_user)):
+    return await User_Pydantic.from_queryset(Users.filter(admin = False))
+
+@router.put("/{user_id}", response_model = User_Pydantic)
+async def verify_user(user_id: int):
+    user_obj = await User_Pydantic.from_queryset_single(Users.get(id=user_id))
+    await Users.filter(id=user_id).update(verified = not user_obj.dict()["verified"])
+    return await User_Pydantic.from_queryset_single(Users.get(id=user_id))
