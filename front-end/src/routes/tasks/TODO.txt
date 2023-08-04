@@ -1,3 +1,0 @@
-nowy zapis await fetch???
-
-naprawic done w nowym tasku
