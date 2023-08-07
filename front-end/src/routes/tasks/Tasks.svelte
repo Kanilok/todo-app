@@ -21,8 +21,12 @@
     }
 
     function remove(){
+        const token = localStorage.getItem("access_token")
         tasks = tasks.filter(task => task.id != removeId)
         fetch(SERWER_URL + "/tasks/archived/" + removeId,{
+          headers: {
+                Authorization: `Bearer ${token}`,
+                },
             method: 'PUT'
         })
         document.getElementById("popup-modal").classList.toggle("hidden")
@@ -46,9 +50,11 @@
     }
 
     function edit({detail}){
+      const token = localStorage.getItem("access_token")
       fetch(SERWER_URL + "/tasks/" + detail.id, {
         method: 'PUT',
             headers: {
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
                 },
             body: JSON.stringify({

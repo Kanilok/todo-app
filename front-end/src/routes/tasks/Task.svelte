@@ -47,8 +47,17 @@
     }
 
     function done(){
-        fetch(SERWER_URL + "/tasks/is-done/" + id + "/?is_late=" + is_late, {
-            method: 'PUT'
+        const token = localStorage.getItem("access_token")
+        fetch(SERWER_URL + "/tasks/is-done/" + id, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+                },
+            body: JSON.stringify({
+                done_on_time: !is_late,
+                task_name: task_name
+            })
         })
         dispatch("reFetch")
     }

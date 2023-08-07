@@ -17,10 +17,6 @@ async def get_unarchived_tasks(user: User_Pydantic = Depends(get_current_user)):
     user_model = await Users.get(id=user_id)
     return await Task_Pydantic.from_queryset(Tasks.filter(user = user_model, archived=False))
 
-@router.get("/archived", response_model=List[Task_Pydantic])
-async def get_archived_tasks():
-    return await Task_Pydantic.from_queryset(Tasks.filter(archived=True))
-
 
 @router.post("/", response_model=Task_Pydantic)
 async def create_task(task: TaskIn_Pydantic, user: User_Pydantic = Depends(get_current_user)):
@@ -33,7 +29,7 @@ async def create_task(task: TaskIn_Pydantic, user: User_Pydantic = Depends(get_c
 @router.put(
     "/{task_id}", response_model=Task_Pydantic, responses={404: {"model": HTTPNotFoundError}}
 )
-async def update_status(task_id: int, task: TaskIn_Pydantic):
+async def update_status(task_id: int, task: TaskIn_Pydantic, user: User_Pydantic = Depends(get_current_user)):
     await Tasks.filter(id=task_id).update(task_name = task.task_name, due_date = task.due_date, description = task.description)
     return await Task_Pydantic.from_queryset_single(Tasks.get(id=task_id))
 
@@ -41,12 +37,12 @@ async def update_status(task_id: int, task: TaskIn_Pydantic):
 @router.put(
     "/is-done/{task_id}", response_model=Task_Pydantic, responses={404: {"model": HTTPNotFoundError}}
 )
-async def update_status(task_id: int, is_late: bool):
+async def update_status(task_id: int, task: TaskIn_Pydantic, user: User_Pydantic = Depends(get_current_user)):
     is_done = await Task_Pydantic.from_queryset_single(Tasks.get(id=task_id))
     await Tasks.filter(id=task_id).update(is_done = not is_done.dict()["is_done"])
     if not is_done.dict()["is_done"]:
         await Tasks.filter(id=task_id).update(done_date = date.today())
-        await Tasks.filter(id=task_id).update(done_on_time = not is_late)
+        await Tasks.filter(id=task_id).update(done_on_time = task.done_on_time)
     else:
         await Tasks.filter(id=task_id).update(done_date = None)
         await Tasks.filter(id=task_id).update(done_on_time = None)
@@ -55,12 +51,8 @@ async def update_status(task_id: int, is_late: bool):
 @router.put(
     "/archived/{task_id}", response_model=Task_Pydantic, responses={404: {"model": HTTPNotFoundError}}
 )
-async def update_archive(task_id: int):
+async def update_archive(task_id: int, user: User_Pydantic = Depends(get_current_user)):
     archived = await Task_Pydantic.from_queryset_single(Tasks.get(id=task_id))
     await Tasks.filter(id=task_id).update(archived = not archived.dict()["archived"])
     return await Task_Pydantic.from_queryset_single(Tasks.get(id=task_id))
 
-
-@router.delete("/{task_id}", responses={404: {"model": HTTPNotFoundError}})
-async def delete_task(task_id: int):
-    await Tasks.filter(id=task_id).delete()
