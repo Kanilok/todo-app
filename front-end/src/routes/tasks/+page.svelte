@@ -7,6 +7,7 @@
     
     let is_fetched = false;
     let verified = false;
+    let logged_in =false;
     const SERWER_URL = "http://127.0.0.1:8000";
 
     async function fetchDataWithToken(token) {
@@ -22,6 +23,7 @@
                 return response.json()
             }).then(data => {
                 verified = data.verified
+                logged_in = true
                 logStore.set({logged: true, username: data.username, admin: data.admin})
             }).catch(error => {
                 console.error('Error fetching data:', error);
@@ -66,7 +68,7 @@
 
 {#if is_fetched}
     <Tasks on:reFetch={() => (fetchDataWithToken(localStorage.getItem("access_token")))} {SERWER_URL}/>
-{:else if !verified}
+{:else if logged_in}
     <h1 class="text-3xl p-2">You are not verified by admin</h1>
 {:else}
     <h1 class="text-3xl p-2">You are not logged in</h1>

@@ -130,8 +130,13 @@ async def get_user(user: User_Pydantic = Depends(get_current_user)):
 
 @router.get("/", response_model=List[User_Pydantic])
 async def get_users(user: User_Pydantic = Depends(get_current_user)):
-    return await User_Pydantic.from_queryset(Users.filter(admin = False))
-
+    if user.admin:
+        return await User_Pydantic.from_queryset(Users.filter(admin = False))
+    else:
+        raise HTTPException(
+                        status_code = status.HTTP_401_UNAUTHORIZED,
+                        detail = "you must be an admin to see users"
+                    )
 
 @router.put("/{user_id}", response_model = User_Pydantic)
 async def verify_user(user_id: int, user_admin: User_Pydantic = Depends(get_current_user)):
