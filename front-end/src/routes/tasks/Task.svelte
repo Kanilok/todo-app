@@ -43,7 +43,7 @@
     }
 
     function edit(){
-        editStore.set({task_name:task_name, description:description, due_date:due_date, id:id})
+        editStore.set({task_name:task_name, description:description, due_date:due_date, id:id, is_done:is_done})
     }
 
     function done(){

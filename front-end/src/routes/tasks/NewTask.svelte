@@ -7,17 +7,23 @@
     let description
     let date
     let id
+    let is_done
 
     onMount(() => {
-        editStore.set({task_name:"", description:"", due_date:"", id:0})
+        editStore.set({task_name:"", description:"", due_date:"", id:0, is_done:false})
 
         editStore.subscribe(data => {
             task_name = data.task_name
             description = data.description
             date = data.due_date
             id = data.id
+            is_done = data.is_done
 
-            document.getElementById("edit").classList.remove("hidden")
+            if(!is_done){
+                document.getElementById("edit").classList.remove("hidden")
+            } else {
+                document.getElementById("edit").classList.add("hidden")
+            }
         })  
 
         document.getElementById("edit").classList.add("hidden")

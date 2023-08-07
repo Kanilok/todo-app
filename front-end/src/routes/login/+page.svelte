@@ -42,11 +42,10 @@
                     } else if (response.status == 406){
                         error_message = "Password must be 8 characters long, contain a number, a symbol and an uppercase letter"
                         showError()
-                    }
-                    return response.json()
-                }).then(response => {
+                    } else {
                         login_message = "Registration"
-                        logIn()               
+                        logIn() 
+                    }
                 }).catch(error => {
                     console.log(error)
                 });
