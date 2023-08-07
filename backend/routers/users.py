@@ -21,6 +21,7 @@ router = APIRouter(
 
 JWT_SECRET = "idkwhatisasecret"
 ALGORITHM = "HS256"
+access_token_expires = timedelta(minutes=15)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl = "users/login")
 
 
@@ -76,7 +77,6 @@ async def generate_token(form_data: OAuth2PasswordRequestForm = Depends()):
     
     user_obj = await User_Pydantic.from_tortoise_orm(user)
 
-    access_token_expires = timedelta(minutes=60)
     access_token = create_jwt_token(
         data={"sub": user_obj.dict()["username"]}, expires_delta=access_token_expires
     )
@@ -92,8 +92,15 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
             status_code = status.HTTP_401_UNAUTHORIZED,
             detail = "invalid username or password"
         )
-
     return await User_Pydantic.from_tortoise_orm(user)
+
+
+@router.post("/refresh-token")
+async def refresh_token(user: User_Pydantic = Depends(get_current_user)):
+    access_token = create_jwt_token(
+        data={"sub": user.username}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
     
 
 @router.post("/admin", response_model=User_Pydantic)

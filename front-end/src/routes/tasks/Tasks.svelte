@@ -22,7 +22,6 @@
 
     function remove(){
         const token = localStorage.getItem("access_token")
-        tasks = tasks.filter(task => task.id != removeId)
         fetch(SERWER_URL + "/tasks/archived/" + removeId,{
           headers: {
                 Authorization: `Bearer ${token}`,
@@ -30,6 +29,7 @@
             method: 'PUT'
         })
         document.getElementById("popup-modal").classList.toggle("hidden")
+        dispatch("reFetch")
     }
 
     function submit({detail}){

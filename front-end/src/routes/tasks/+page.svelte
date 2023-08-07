@@ -52,10 +52,26 @@
                 }
                 is_fetched = true
                 taskStore.set(tasks)
+                refreshToken(token)
             }).catch(error => {
                 console.error('Error fetching data:', error);
             });
         } 
+    }
+
+    async function refreshToken(token){
+        await fetch(SERWER_URL + "/users/refresh-token", {
+            method: "POST",
+            headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+        }).then(response => {
+            return response.json()
+        }).then(data => {
+                localStorage.setItem("access_token", data.access_token)
+        }).catch(error => {
+                console.log(error)
+        });
     }
 
     onMount(() => {
