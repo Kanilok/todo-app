@@ -1,5 +1,6 @@
 import jwt
-from .models import User_Pydantic, UserIn_Pydantic, Users
+from .models import User_Pydantic, UserIn_Pydantic, Task_Pydantic, Tasks, Users
+from .graphs import plotting
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.hash import bcrypt
@@ -138,6 +139,14 @@ async def get_user(user: User_Pydantic = Depends(get_current_user)):
 @router.get("/", response_model=List[User_Pydantic])
 async def get_users(user: User_Pydantic = Depends(get_current_user)):
     if user.admin:
+        user_dict = {}
+        users = await User_Pydantic.from_queryset(Users.all())
+        for userr in users:
+            id = userr.dict()["id"]
+            user_obj = await Users.get(id=id)
+            user_dict[userr.dict()["username"]] = await Task_Pydantic.from_queryset(Tasks.filter(user = user_obj, archived=False))
+        plotting(user_dict)
+
         return await User_Pydantic.from_queryset(Users.filter(admin = False))
     else:
         raise HTTPException(

@@ -3,6 +3,7 @@ from .models import Task_Pydantic, TaskIn_Pydantic, User_Pydantic, Tasks, Users
 
 def plotting(user_dict):
 
+    path = "../front-end/static/"
     names = []
     values = []
     details = ["none", "date", "description", "both"]
@@ -29,16 +30,16 @@ def plotting(user_dict):
 
         
     plt.bar(names, values)
-    plt.savefig("bar.png")
+    plt.savefig(path + "bar.png")
     plt.clf()
 
     plt.hist(values)
-    plt.savefig("hist.png")
+    plt.savefig(path + "hist.png")
     plt.clf()
 
     plt.pie(done_values, labels = done)
-    plt.savefig("pie_done.png")
+    plt.savefig(path + "pie_done.png")
     plt.clf()
 
     plt.pie(details_values, labels = details)
-    plt.savefig("pie_details.png")
+    plt.savefig(path + "pie_details.png")
