@@ -3,7 +3,6 @@ from routers import tasks, users
 from fastapi.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
 
-
 app = FastAPI()
 
 app.include_router(tasks.router)

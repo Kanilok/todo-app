@@ -1,5 +1,6 @@
 from typing import List, Union
 from .models import Task_Pydantic, TaskIn_Pydantic, User_Pydantic, Tasks, Users
+from .graphs import plotting
 from .users import get_current_user
 from tortoise.contrib.fastapi import HTTPNotFoundError
 from fastapi import APIRouter, Depends
@@ -10,9 +11,21 @@ router = APIRouter(
     tags = ["tasks"]
 )
 
-
 @router.get("/", response_model=List[Task_Pydantic])
 async def get_unarchived_tasks(user: User_Pydantic = Depends(get_current_user)):
+    
+
+    user_dict = {}
+    users = await User_Pydantic.from_queryset(Users.all())
+    for userr in users:
+        id = userr.dict()["id"]
+        user_obj = await Users.get(id=id)
+        user_dict[userr.dict()["username"]] = await Task_Pydantic.from_queryset(Tasks.filter(user = user_obj, archived=False))
+    
+    plotting(user_dict)
+
+
+
     user_id = user.dict()["id"]
     user_model = await Users.get(id=user_id)
     return await Task_Pydantic.from_queryset(Tasks.filter(user = user_model, archived=False))

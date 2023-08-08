@@ -5,9 +5,13 @@
     export let SERWER_URL
 
     function verify(){
+        const token = localStorage.getItem("access_token")
         verified = !verified
         fetch(SERWER_URL + "/users/" + id,{
             method: 'PUT',
+            headers: {
+                    Authorization: `Bearer ${token}`,
+                }
         })
     }
 </script>

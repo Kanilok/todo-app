@@ -147,6 +147,7 @@ async def get_users(user: User_Pydantic = Depends(get_current_user)):
 
 @router.put("/{user_id}", response_model = User_Pydantic)
 async def verify_user(user_id: int, user_admin: User_Pydantic = Depends(get_current_user)):
+    print(user_admin.admin)
     if user_admin.admin:
         user_obj = await User_Pydantic.from_queryset_single(Users.get(id=user_id))
         await Users.filter(id=user_id).update(verified = not user_obj.dict()["verified"])
