@@ -57,3 +57,18 @@
 {#if is_fetched}
     <Users {users} {SERWER_URL}/>
 {/if}
+
+<table>
+    <tr>
+        <td><img src="/bar.png">
+        </td>
+        <td><img src="/hist.png">
+        </td>
+    </tr>
+    <tr>
+        <td><img src="/pie_done.png">
+        </td>
+        <td><img src="/pie_details.png">
+        </td>
+    </tr>
+</table>
